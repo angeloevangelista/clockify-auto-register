@@ -69,4 +69,6 @@ def register_appointments():
     else:
       print(f'✅ day {short_format_current_date}')
 
-register_appointments()
+# register_appointments()
+
+print(Lab2DevApi()._headers)
