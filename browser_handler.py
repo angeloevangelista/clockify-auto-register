@@ -25,10 +25,7 @@ def get_authorization_token() -> tuple[str, str]:
     browser_options = webdriver.FirefoxOptions()
     browser_options.headless = True
     
-    browser_driver = webdriver.Firefox(
-      options=browser_options, 
-      executable_path='/usr/bin/geckodriver',
-    )
+    browser_driver = webdriver.Firefox(options=browser_options)
 
     browser_driver.get(portal_url)
 
