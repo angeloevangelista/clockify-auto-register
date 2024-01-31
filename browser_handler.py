@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_authorization_token() -> tuple[str, str]:
+  wait_time = 30
   browser_driver: BaseWebDriver = None
 
   try:
@@ -24,7 +25,7 @@ def get_authorization_token() -> tuple[str, str]:
     user_password = os.environ['LAB2DEV_USER_PASSWORD']
 
     browser_options = webdriver.ChromeOptions()
-    browser_options.add_argument("--headless")
+    browser_options.add_argument("--headless=new")
     browser_options.add_argument("--no-sandbox")
     browser_options.add_argument("--disable-dev-shm-usage")
     browser_options.add_experimental_option("detach", True)
@@ -44,7 +45,7 @@ def get_authorization_token() -> tuple[str, str]:
     portal_email_input.send_keys(user_email)
     portal_email_input.send_keys(Keys.RETURN)
 
-    portal_otp_confirm_button = WebDriverWait(browser_driver, 30).until(
+    portal_otp_confirm_button = WebDriverWait(browser_driver, wait_time).until(
       expected_conditions.element_to_be_clickable((
         By.CSS_SELECTOR, 'button[type=submit]',
       ))
@@ -63,9 +64,13 @@ def get_authorization_token() -> tuple[str, str]:
     webmail_password_input.clear()
     webmail_password_input.send_keys(user_password)
 
-    browser_driver.find_element(By.ID, 'login_submit').click()
+    roundcube_mail_anchor = WebDriverWait(browser_driver, wait_time).until(
+      expected_conditions.element_to_be_clickable((
+        By.ID, 'login_submit',
+      ))
+    ).click()
 
-    roundcube_mail_anchor = WebDriverWait(browser_driver, 30).until(
+    roundcube_mail_anchor = WebDriverWait(browser_driver, wait_time).until(
       expected_conditions.presence_of_element_located((
         By.ID, 'lnkUserPrefroundcube',
       ))
@@ -73,7 +78,7 @@ def get_authorization_token() -> tuple[str, str]:
     
     browser_driver.get(roundcube_mail_anchor.get_attribute('href'))
 
-    first_message_item = WebDriverWait(browser_driver, 30).until(
+    first_message_item = WebDriverWait(browser_driver, wait_time).until(
       expected_conditions.presence_of_element_located((
         By.ID, 'messagelist',
       ))
@@ -84,7 +89,7 @@ def get_authorization_token() -> tuple[str, str]:
 
     ActionChains(browser_driver).double_click(first_message_item).perform()
 
-    message_body_div = WebDriverWait(browser_driver, 30).until(
+    message_body_div = WebDriverWait(browser_driver, wait_time).until(
       expected_conditions.presence_of_element_located((
         By.ID, 'messagebody',
       ))
@@ -111,7 +116,7 @@ def get_authorization_token() -> tuple[str, str]:
 
     portal_otp_confirm_button.click()
 
-    WebDriverWait(browser_driver, 30).until(
+    WebDriverWait(browser_driver, wait_time).until(
       expected_conditions.url_to_be(portal_url)
     )
 
