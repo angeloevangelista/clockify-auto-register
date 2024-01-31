@@ -22,7 +22,14 @@ def get_authorization_token() -> tuple[str, str]:
     user_email = os.environ['LAB2DEV_USER_EMAIL']
     user_password = os.environ['LAB2DEV_USER_PASSWORD']
 
-    browser_driver = webdriver.Firefox()
+    browser_options = webdriver.FirefoxOptions()
+    browser_options.headless = True
+    
+    browser_driver = webdriver.Firefox(
+      options=browser_options, 
+      executable_path='/usr/bin/geckodriver',
+    )
+
     browser_driver.get(portal_url)
 
     portal_email_input = browser_driver.find_element(
