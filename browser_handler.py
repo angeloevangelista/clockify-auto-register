@@ -2,6 +2,8 @@ import os
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.remote.webdriver import BaseWebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -22,10 +24,15 @@ def get_authorization_token() -> tuple[str, str]:
     user_email = os.environ['LAB2DEV_USER_EMAIL']
     user_password = os.environ['LAB2DEV_USER_PASSWORD']
 
+    webdriver_service = Service(GeckoDriverManager().install())
+
     browser_options = webdriver.FirefoxOptions()
     browser_options.headless = True
     
-    browser_driver = webdriver.Firefox(options=browser_options)
+    browser_driver = webdriver.Firefox(
+      service=webdriver_service,
+      options=browser_options,
+    )
 
     browser_driver.get(portal_url)
 
