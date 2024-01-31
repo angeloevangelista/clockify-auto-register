@@ -2,7 +2,7 @@ import os
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chromium.service import ChromiumService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.remote.webdriver import BaseWebDriver
 from selenium.webdriver.common.by import By
@@ -24,7 +24,7 @@ def get_authorization_token() -> tuple[str, str]:
     user_email = os.environ['LAB2DEV_USER_EMAIL']
     user_password = os.environ['LAB2DEV_USER_PASSWORD']
 
-    webdriver_service = Service(ChromeDriverManager().install())
+    webdriver_service = ChromiumService(ChromeDriverManager().install())
 
     browser_options = webdriver.ChromeOptions()
     # browser_options.add_argument("--headless")
