@@ -2,8 +2,8 @@ import os
 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
-from selenium.webdriver.firefox.service import Service
-from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.remote.webdriver import BaseWebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -24,12 +24,15 @@ def get_authorization_token() -> tuple[str, str]:
     user_email = os.environ['LAB2DEV_USER_EMAIL']
     user_password = os.environ['LAB2DEV_USER_PASSWORD']
 
-    webdriver_service = Service(GeckoDriverManager().install())
+    webdriver_service = Service(ChromeDriverManager().install())
 
-    browser_options = webdriver.FirefoxOptions()
-    browser_options.headless = True
+    browser_options = webdriver.ChromeOptions()
+    # browser_options.add_argument("--headless")
+    browser_options.add_argument("--no-sandbox")
+    browser_options.add_argument("--disable-dev-shm-usage")
+    browser_options.add_experimental_option("detach", True)
     
-    browser_driver = webdriver.Firefox(
+    browser_driver = webdriver.Chrome(
       service=webdriver_service,
       options=browser_options,
     )
